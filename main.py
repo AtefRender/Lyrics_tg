@@ -13,6 +13,7 @@ headers = {
 API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
 bot = telebot.TeleBot(API_KEY)
+server()
 file = []
 
 def get_url(name):
@@ -73,7 +74,6 @@ def tbot():
         print("Done!")
 
     print('Bot is running...')
-    server()
     bot.polling()
 
 
