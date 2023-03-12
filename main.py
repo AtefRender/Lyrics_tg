@@ -10,51 +10,52 @@ headers = {
     }
 
 API_KEY = os.environ.get('API_KEY')
+BASE = os.environ.get('BASE')
 bot = telebot.TeleBot(API_KEY)
 
 file = []
 def get_url(name):
-    base = "https://genius.com/api/search/multi?per_page=5&q="
-    url = base + name.replace(" ", "%20")
+    url = BASE + name.replace(" ", "%20")
     return url
 
 def lyrics_scrape(name):
-    with requests.Session() as s:
-        #first page:
-        r = requests.get(get_url(name), headers=headers)
-        soup = bs(r.content, features='html.parser')
-        data = soup.text
-        parsed_json = json.loads(data)
-        try:
-            link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
-        except:
-            return "Sorry, no matches :)"
-        info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
-        file.append(info.replace('by','-') + ' Lyrics:\n\n')
+    #first page:
+    time.sleep(0.01)
+    r = requests.get(get_url(name), headers=headers)
+    soup = bs(r.content, features='html.parser')
+    data = soup.text
+    parsed_json = json.loads(data)
+    try:
+        link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
+    except:
+        return "Sorry, no matches :)"
+    info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
+    file.append(info.replace('by','-') + ' Lyrics:\n\n')
         
-        #second page (Entering the link):
-        r1 = requests.get(link, headers=headers)
-        soup1 = bs(r1.content, features='html.parser')
-        lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
-        if lyrics_raw == None:
-            lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
+    #second page (Entering the link):
+    time.sleep(0.01)
+    r1 = requests.get(link, headers=headers)
+    soup1 = bs(r1.content, features='html.parser')
+    lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
+    if lyrics_raw == None:
+        lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
 
-        #adding a new line for a new line.
-        lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
+    #adding a new line for a new line.
+    lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
 
-        convert = bs(lyrics_fixed, features='html.parser')
-        lyrics = convert.text
+    convert = bs(lyrics_fixed, features='html.parser')
+    lyrics = convert.text
 
-        file.append(lyrics)
+    file.append(lyrics)
 
-        lyricsfr = "".join(line for line in file)
-        file.clear()
-        return lyricsfr
+    lyricsfr = "".join(line for line in file)
+    file.clear()
+    return lyricsfr
         
 def tbot():
     @bot.message_handler(commands=['start'])
     def start(message):
-        smsg = "Hey, I am a lyrics bot\nSend me the name of the song and I will get its lyrics for you <3\n(You can send with artist name for more accuarcy)."
+        smsg = "Hey, I am LyricsG Bot\nSend me the name of the song and I will get its lyrics for you <3\n(You can send with artist name for more accuarcy)."
         bot.reply_to(message, smsg)
         print("start")
 
