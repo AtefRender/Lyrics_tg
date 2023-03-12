@@ -46,10 +46,6 @@ def lyrics_scrape(name):
         lyricsfr = "".join(line for line in file)
         file.clear()
         return lyricsfr
-        except TimeoutError:
-            errmsg = 'Server indeed does suck, timed out.\nPlease try again :('
-            print(errmsg)
-            return errmsg
         
 def tbot():
     @bot.message_handler(commands=['start'])
