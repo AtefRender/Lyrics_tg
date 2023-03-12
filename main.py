@@ -12,7 +12,7 @@ headers = {
 
 API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
-
+bot = telebot.TeleBot(API_KEY)
 file = []
 
 def get_url(name):
@@ -21,7 +21,7 @@ def get_url(name):
 
 def lyrics_scrape(name):
     #first page:
-    time.sleep(0.5)
+    time.sleep(0.01)
     r = requests.get(get_url(name), headers=headers)
     soup = bs(r.content, features='html.parser')
     data = soup.text
@@ -34,7 +34,7 @@ def lyrics_scrape(name):
     file.append(info.replace('by','-') + ' Lyrics:\n\n')
         
     #second page (Entering the link):
-    time.sleep(0.5)
+    time.sleep(0.01)
     r1 = requests.get(link, headers=headers)
     soup1 = bs(r1.content, features='html.parser')
     lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
@@ -54,7 +54,6 @@ def lyrics_scrape(name):
     return lyricsfr
         
 def tbot():
-    bot = telebot.TeleBot(API_KEY)
     @bot.message_handler(commands=['start'])
     def start(message):
         smsg = "Hey, I am LyricsG Bot\nSend me the name of the song and I will get its lyrics for you <3\n(You can send with artist name for more accuarcy)."
@@ -68,6 +67,7 @@ def tbot():
     def reply(message):
         name = message.text
         print(name)
+        time.sleep(0.01)
         lyrics = lyrics_scrape(name)
         bot.reply_to(message, lyrics)
         print("Done!")
