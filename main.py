@@ -26,6 +26,8 @@ def lyrics_scrape(name):
         data = soup.text
         parsed_json = json.loads(data)
         link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
+        if link == None:
+            return "Sorry, no matching."
         info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
         file.append(info.replace('by','-') + ' Lyrics:\n\n')
         
@@ -64,7 +66,7 @@ def tbot():
         print(name)
         lyrics = lyrics_scrape(name)
         bot.reply_to(message, lyrics)
-        print(lyrics)
+        print("Done!")
 
     print('Bot is running...')
     server()
