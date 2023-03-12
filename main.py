@@ -30,7 +30,7 @@ def lyrics_scrape(name):
         
         #second page (Entering the link):
         r1 = requests.get(link, headers=headers)
-        soup1 = bs(r1.content, features='lxml')
+        soup1 = bs(r1.content, features='html.parser')
         lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
         if lyrics_raw == None:
             lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
@@ -38,7 +38,7 @@ def lyrics_scrape(name):
         #adding a new line for a new line.
         lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
 
-        convert = bs(lyrics_fixed, features='lxml')
+        convert = bs(lyrics_fixed, features='html.parser')
         lyrics = convert.text
 
         file.append(lyrics)
