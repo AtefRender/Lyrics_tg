@@ -3,6 +3,7 @@ import telebot
 from bs4 import BeautifulSoup as bs
 import requests
 import json
+from server import server
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
@@ -66,6 +67,7 @@ def tbot():
         print(lyrics)
 
     print('Bot is running...')
+    server()
     bot.polling()
 
 
