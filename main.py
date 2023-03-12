@@ -21,7 +21,7 @@ def get_url(name):
 
 def lyrics_scrape(name):
     #first page:
-    time.sleep(0.01)
+    time.sleep(0.2)
     r = requests.get(get_url(name), headers=headers)
     soup = bs(r.content, features='html.parser')
     data = soup.text
@@ -34,7 +34,7 @@ def lyrics_scrape(name):
     file.append(info.replace('by','-') + ' Lyrics:\n\n')
         
     #second page (Entering the link):
-    time.sleep(0.01)
+    time.sleep(0.2)
     r1 = requests.get(link, headers=headers)
     soup1 = bs(r1.content, features='html.parser')
     lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
