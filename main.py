@@ -14,12 +14,12 @@ API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
 
 file = []
+
 def get_url(name):
     url = BASE + name.replace(" ", "%20")
     return url
 
 def lyrics_scrape(name):
-    bot = telebot.TeleBot(API_KEY)
     #first page:
     time.sleep(0.5)
     r = requests.get(get_url(name), headers=headers)
@@ -54,6 +54,7 @@ def lyrics_scrape(name):
     return lyricsfr
         
 def tbot():
+    bot = telebot.TeleBot(API_KEY)
     @bot.message_handler(commands=['start'])
     def start(message):
         smsg = "Hey, I am LyricsG Bot\nSend me the name of the song and I will get its lyrics for you <3\n(You can send with artist name for more accuarcy)."
