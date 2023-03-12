@@ -25,9 +25,10 @@ def lyrics_scrape(name):
         soup = bs(r.content, features='html.parser')
         data = soup.text
         parsed_json = json.loads(data)
-        link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
-        if link == None:
-            return "Sorry, no matching."
+        try:
+            link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
+        except:
+            return "Sorry, no matches :)"
         info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
         file.append(info.replace('by','-') + ' Lyrics:\n\n')
         
