@@ -19,43 +19,38 @@ def get_url(name):
 
 def lyrics_scrape(name):
     with requests.Session() as s:
-        try:
-            #first page:
-            r = requests.get(get_url(name), headers=headers)
-            soup = bs(r.content, features='lxml')
-            data = soup.text
-            parsed_json = json.loads(data)
-            link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
-            info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
-            file.append(info.replace('by','-') + ' Lyrics:\n\n')
+        #first page:
+        r = requests.get(get_url(name), headers=headers)
+        soup = bs(r.content, features='lxml')
+        data = soup.text
+        parsed_json = json.loads(data)
+        link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
+        info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
+        file.append(info.replace('by','-') + ' Lyrics:\n\n')
+        
+        #second page (Entering the link):
+        r1 = requests.get(link, headers=headers)
+        soup1 = bs(r1.content, features='lxml')
+        lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
+        if lyrics_raw == None:
+            lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
 
-            #second page (Entering the link):
-            r1 = requests.get(link, headers=headers)
-            soup1 = bs(r1.content, features='lxml')
-            lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
-            if lyrics_raw == None:
-                lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
+        #adding a new line for a new line.
+        lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
 
-            #adding a new line for a new line.
-            lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
+        convert = bs(lyrics_fixed, features='lxml')
+        lyrics = convert.text
 
-            convert = bs(lyrics_fixed, features='lxml')
-            lyrics = convert.text
+        file.append(lyrics)
 
-            file.append(lyrics)
-
-            lyricsfr = "".join(line for line in file)
-            file.clear()
-            return lyricsfr
+        lyricsfr = "".join(line for line in file)
+        file.clear()
+        return lyricsfr
         except TimeoutError:
             errmsg = 'Server indeed does suck, timed out.\nPlease try again :('
             print(errmsg)
             return errmsg
-        except:
-            errmsg = 'Sorry, something went wrong :('
-            print(errmsg)
-            return errmsg
-
+        
 def tbot():
     @bot.message_handler(commands=['start'])
     def start(message):
