@@ -1,4 +1,4 @@
-import os
+#import os
 import telebot
 from bs4 import BeautifulSoup as bs
 import requests
@@ -8,8 +8,8 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
     }
 
-API_KEY = os.getenv('API_KEY')
-bot = telebot.TeleBot('API_KEY')
+#API_KEY = os.getenv('API_KEY')
+bot = telebot.TeleBot('6294630132:AAHRNORsY4Of-0BlappS05pT64WhoK_GyPs')
 
 file = []
 def get_url(name):
