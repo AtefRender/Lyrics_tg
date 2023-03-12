@@ -12,7 +12,6 @@ headers = {
 
 API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
-bot = telebot.TeleBot(API_KEY)
 
 file = []
 def get_url(name):
@@ -20,6 +19,7 @@ def get_url(name):
     return url
 
 def lyrics_scrape(name):
+    bot = telebot.TeleBot(API_KEY)
     #first page:
     time.sleep(0.5)
     r = requests.get(get_url(name), headers=headers)
