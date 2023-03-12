@@ -21,7 +21,7 @@ def lyrics_scrape(name):
     with requests.Session() as s:
         #first page:
         r = requests.get(get_url(name), headers=headers)
-        soup = bs(r.content, features='lxml')
+        soup = bs(r.content, features='html.parser')
         data = soup.text
         parsed_json = json.loads(data)
         link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
