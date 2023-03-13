@@ -13,6 +13,8 @@ headers = {
 API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
 bot = telebot.TeleBot(API_KEY)
+bot.set_webhook()
+
 server()
 file = []
 
@@ -86,7 +88,7 @@ def tbot():
         print("Done!")
 
     print('Bot is running...')
-    bot.polling()
+    bot.infinity_polling()
 
 
 tbot()
