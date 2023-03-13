@@ -23,7 +23,7 @@ def get_url(name):
 
 def lyrics_scrape(name):
     #first page:
-    time.sleep(0.2)
+    time.sleep(0.01)
     r = requests.get(get_url(name), headers=headers)
     if r.status_code == 200:
         soup = bs(r.content, features='html.parser')
@@ -33,14 +33,17 @@ def lyrics_scrape(name):
             link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
         except:
             return "Sorry, no matches :)"
+        
+        link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
         info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
+        photo = parsed_json['response']['sections'][1]['hits'][0]['result']['song_art_image_url']
         file.append(info.replace('by','-') + ' Lyrics:\n\n')
     else:
         print("Server error")
         return "Sorry, Server error :)"
     
     #second page (Entering the link):
-    time.sleep(0.2)
+    time.sleep(0.01)
     r1 = requests.get(link, headers=headers)
     if r1.status_code == 200:
         soup1 = bs(r1.content, features='html.parser')
@@ -53,13 +56,11 @@ def lyrics_scrape(name):
 
         convert = bs(lyrics_fixed, features='html.parser')
         lyrics = convert.text
-
         file.append(lyrics)
-
         lyricsfr = "".join(line for line in file)
         file.clear()
     
-        return lyricsfr
+        return lyricsfr, photo
     else:
         print("Server error")
         return "Sorry, Server error :)"
@@ -69,7 +70,7 @@ def tbot():
     def start(message):
         smsg = "Hey, I am LyricsG Bot\nSend me the name of the song and I will get its lyrics for you <3\n(You can send with artist name for more accuarcy)."
         bot.reply_to(message, smsg)
-        print("start")
+        print(str(message.chat.username) + " start")
 
     def ismsg(message):
         return True
@@ -77,14 +78,13 @@ def tbot():
     @bot.message_handler(func=ismsg)
     def reply(message):
         name = message.text
-        print(name)
-        time.sleep(0.01)
-        lyrics = lyrics_scrape(name)
+        print(str(message.chat.username) + ' - ' + name)
+        lyrics, photo = lyrics_scrape(name)
+        bot.send_photo(chat_id=message.chat.id, photo=photo)
         bot.reply_to(message, lyrics)
         print("Done!")
 
     print('Bot is running...')
     bot.infinity_polling()
-
 
 tbot()
