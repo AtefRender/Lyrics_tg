@@ -23,7 +23,7 @@ def get_url(name):
 
 def lyrics_scrape(name):
     #first page:
-    time.sleep(0.45)
+    time.sleep(0.2)
     r = requests.get(get_url(name), headers=headers)
     if r.status_code == 200:
         soup = bs(r.content, features='html.parser')
@@ -40,7 +40,7 @@ def lyrics_scrape(name):
         return "Sorry, Server error :)"
     
     #second page (Entering the link):
-    time.sleep(0.45)
+    time.sleep(0.2)
     r1 = requests.get(link, headers=headers)
     if r1.status_code == 200:
         soup1 = bs(r1.content, features='html.parser')
