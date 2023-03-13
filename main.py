@@ -14,7 +14,6 @@ API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
 bot = telebot.TeleBot(API_KEY)
 
-
 server()
 file = []
 
@@ -39,7 +38,6 @@ def lyrics_scrape(name):
     else:
         print("Server error")
         return "Sorry, Server error :)"
-    r.close()
     
     #second page (Entering the link):
     time.sleep(0.45)
@@ -65,9 +63,7 @@ def lyrics_scrape(name):
     else:
         print("Server error")
         return "Sorry, Server error :)"
-    
-    r1.close()
-    
+        
 def tbot():
     @bot.message_handler(commands=['start'])
     def start(message):
