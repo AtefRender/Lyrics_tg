@@ -84,7 +84,7 @@ def tbot():
         print("Done!")
 
     print('Bot is running...')
-    bot.polling()
+    bot.infinity_polling()
 
 
 tbot()
