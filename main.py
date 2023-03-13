@@ -22,37 +22,45 @@ def get_url(name):
 
 def lyrics_scrape(name):
     #first page:
-    time.sleep(0.01)
+    time.sleep(0.45)
     r = requests.get(get_url(name), headers=headers)
-    soup = bs(r.content, features='html.parser')
-    data = soup.text
-    parsed_json = json.loads(data)
-    try:
-        link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
-    except:
-        return "Sorry, no matches :)"
-    info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
-    file.append(info.replace('by','-') + ' Lyrics:\n\n')
-        
+    if r.status_code == 200:
+        soup = bs(r.content, features='html.parser')
+        data = soup.text
+        parsed_json = json.loads(data)
+        try:
+            link = parsed_json['response']['sections'][1]['hits'][0]['result']['url']
+        except:
+            return "Sorry, no matches :)"
+        info = parsed_json['response']['sections'][1]['hits'][0]['result']['full_title']
+        file.append(info.replace('by','-') + ' Lyrics:\n\n')
+    else:
+        print("Server error")
+        return "Sorry, Server error :)"
+    
     #second page (Entering the link):
-    time.sleep(0.01)
+    time.sleep(0.45)
     r1 = requests.get(link, headers=headers)
-    soup1 = bs(r1.content, features='html.parser')
-    lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
-    if lyrics_raw == None:
-        lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
+    if r.status_code == 200:
+        soup1 = bs(r1.content, features='html.parser')
+        lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
+        if lyrics_raw == None:
+            lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
 
-    #adding a new line for a new line.
-    lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
+        #adding a new line for a new line.
+        lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
 
-    convert = bs(lyrics_fixed, features='html.parser')
-    lyrics = convert.text
+        convert = bs(lyrics_fixed, features='html.parser')
+        lyrics = convert.text
 
-    file.append(lyrics)
+        file.append(lyrics)
 
-    lyricsfr = "".join(line for line in file)
-    file.clear()
-    return lyricsfr
+        lyricsfr = "".join(line for line in file)
+        file.clear()
+        return lyricsfr
+    else:
+        print("Server error")
+        return "Sorry, Server error :)"
         
 def tbot():
     @bot.message_handler(commands=['start'])
