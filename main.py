@@ -8,7 +8,6 @@ import time
 
 headers = {
     'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
-    'Connection': 'close',
     }
 
 API_KEY = os.environ.get('API_KEY')
@@ -38,6 +37,7 @@ def lyrics_scrape(name):
     else:
         print("Server error")
         return "Sorry, Server error :)"
+    r.close()
     
     #second page (Entering the link):
     time.sleep(0.45)
@@ -58,11 +58,14 @@ def lyrics_scrape(name):
 
         lyricsfr = "".join(line for line in file)
         file.clear()
+    
         return lyricsfr
     else:
         print("Server error")
         return "Sorry, Server error :)"
-        
+    
+    r1.close()
+    
 def tbot():
     @bot.message_handler(commands=['start'])
     def start(message):
