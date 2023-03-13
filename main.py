@@ -41,7 +41,7 @@ def lyrics_scrape(name):
     #second page (Entering the link):
     time.sleep(0.45)
     r1 = requests.get(link, headers=headers)
-    if r.status_code == 200:
+    if r1.status_code == 200:
         soup1 = bs(r1.content, features='html.parser')
         lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
         if lyrics_raw == None:
