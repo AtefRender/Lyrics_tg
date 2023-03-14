@@ -107,7 +107,7 @@ def tbot():
         button0 = types.InlineKeyboardButton(text='About the song', callback_data='click0')
         button1 = types.InlineKeyboardButton(text='Album tracklist', callback_data='click1')
         button2 = types.InlineKeyboardButton(text='Done.', callback_data='click2')
-        keyboard.add(button0, button1, button2)
+        keyboard.row(button0, button1, button2)
         bot.send_photo(chat_id=message.chat.id, photo=photo)
         bot.reply_to(message, lyrics)
         bot.reply_to(message, 'More:', reply_markup=keyboard)
