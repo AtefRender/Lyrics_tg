@@ -71,6 +71,13 @@ def lyrics_scrape(name):
         except:
             album = 'Sorry, couldn\'t find data.'
 
+        #Song yt link:
+        global yt_link
+        try:
+            yt_link = soup1.find('a', 'ytp-impression-link').get('href')
+        except:
+            yt_link = '#'
+   
         #Lyrics
         lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
         if lyrics_raw == None:
@@ -106,8 +113,9 @@ def tbot():
         keyboard = types.InlineKeyboardMarkup()
         button0 = types.InlineKeyboardButton(text='About the song', callback_data='click0')
         button1 = types.InlineKeyboardButton(text='Album tracklist', callback_data='click1')
-        button2 = types.InlineKeyboardButton(text='Done.', callback_data='click2')
-        keyboard.row(button0, button1, button2)
+        button2 = types.InlineKeyboardButton(text='YouTube video link', url=yt_link)
+        button3 = types.InlineKeyboardButton(text='Close', callback_data='click3')
+        keyboard.add(button0, button1, button2, button3)
         bot.send_photo(chat_id=message.chat.id, photo=photo)
         bot.reply_to(message, lyrics)
         bot.reply_to(message, 'More:', reply_markup=keyboard)
@@ -121,7 +129,7 @@ def tbot():
                 bot.send_message(chat_id=call.message.chat.id, text='About the song:\n' + about)
             if call.data == 'click1':
                 bot.send_message(chat_id=call.message.chat.id, text='Album tracklist:\n' + album)
-            if call.data == 'click2':
+            if call.data == 'click3':
                 bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
 
     print('Bot is running...')
