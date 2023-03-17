@@ -4,6 +4,7 @@ from telebot import types
 from bs4 import BeautifulSoup as bs
 import requests
 import json
+from datetime import datetime
 from server import server
 import time
 
@@ -13,6 +14,7 @@ headers = {
 
 API_KEY = os.environ.get('API_KEY')
 BASE = os.environ.get('BASE')
+CHATID = os.environ.get('CHATID')
 bot = telebot.TeleBot(API_KEY)
 
 server()
@@ -110,7 +112,15 @@ def tbot():
         name = message.text
         print(str(message.chat.username) + ' - ' + name)
         first_page(name)
-
+        
+        userId = message.chat.id
+        nameUser = str(message.chat.first_name) + ' ' + str(message.chat.last_name)
+        username = message.chat.username
+        text = message.text
+        date = datetime.now()
+        data = f'User id: {userId}\nUsermae: {username}\nName: {nameUser}\nText: {text}\nDate: {date}'
+        bot.send_message(chat_id=CHATID, text=data)
+        
         #Serch kb:
         markup = types.InlineKeyboardMarkup()
         count = 0
