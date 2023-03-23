@@ -88,7 +88,7 @@ def second_page(link):
             album = 'Sorry, couldn\'t find data.'
 
         #Lyrics
-        lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-6 YYrds')
+        lyrics_raw = soup1.find('div','Lyrics__Container-sc-1ynbvzw-5 Dzxov')
         if lyrics_raw == None:
             lyrics_raw = soup1.find('div', 'LyricsPlaceholder__Message-uen8er-3 jlYyFx')
         lyrics_fixed = str(lyrics_raw).replace('<br/>', '\n')
